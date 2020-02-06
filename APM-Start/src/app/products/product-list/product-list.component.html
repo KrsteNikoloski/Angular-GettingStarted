@@ -5,8 +5,7 @@
       <div class="col-md-2">Filtered by:</div>
       <div class="col-md-4">
         <input type="text"
-               [(ngModel)]="listFilter"
-               (input)="filterProducts()" />
+               [(ngModel)]="listFilter" />
       </div>
     </div>
     <div class="row">
@@ -33,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of products">
+          <tr *ngFor="let product of filteredProducts">
             <td>
               <img *ngIf="showImage"
                    [src]="product.imageUrl"
@@ -41,11 +40,18 @@
                    [style.width.px]="imageWidth"
                    [style.margin.px]="imageMargin" />
             </td>
-            <td>{{product.name}}</td>
-            <td>{{product.code | lowercase}}</td>
+            <td>
+              <a [routerLink]="['/products', product.id]">
+                {{product.name}}
+              </a>
+            </td>
+            <td>{{product.code | lowercase | convertStringTo: "-" : " "}}</td>
             <td>{{product.releaseDate}}</td>
             <td>{{product.price | currency: "USD" : "symbol" : "1.2-2"}}</td>
-            <td>{{product.starRating}}</td>
+            <td>
+              <pm-star [rating]="product.starRating"
+                       (ratingClicked)="onRatingClicked($event)"></pm-star>
+            </td>
           </tr>
         </tbody>
       </table>
